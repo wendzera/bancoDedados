@@ -1,0 +1,183 @@
+create view ex70 as
+select p.codigo_produto,
+       p.descricao_produto,
+       sum(ip.quantidade) as quantidade_vendida
+from item_do_pedido ip
+join produto p on ip.codigo_produto = p.codigo_produto
+group by p.codigo_produto, p.descricao_produto
+order by 3 desc
+limit 5;
+
+
+select * from ex70
+--------------------------------------------------------
+CREATE VIEW EX1
+AS 
+SELECT N.*,C.AREA,C.COD_AREA,C.QUADRO,C.BONUS,C.CONTRATACAO,
+			CL.*,CEP.ESTADO, CEP.REGIAO
+FROM NIVEL N INNER JOIN CARGO C
+	ON N.COD_NIVEL = C.COD_NIVEL
+	INNER JOIN CLIENTE CL
+	ON C.COD_CARGO=CL.COD_CARGO_RESPONSAVEL
+    INNER JOIN CEP
+	ON CL.CEP=CEP.CEP
+
+	SELECT * FROM EX1
+--------------------------------------------------------
+create view ex2
+as
+select cep.regiao, count(*) as quantidade
+from cliente c inner join cep
+on c.cep=cep.cep
+group by cep.regiao
+
+select * from ex2
+
+
+---------------------------------------------------------
+CREATE VIEW ex03 AS
+SELECT 
+    n.descricao_nivel,
+    SUM(f.salario_base) AS total_salario_base,
+    SUM(f.beneficios) AS total_beneficios,
+    SUM(f.vt) AS total_vt,
+    SUM(f.vr) AS total_vr,
+    SUM(f.impostos) AS total_impostos
+FROM funcionario f
+INNER JOIN cargo c ON f.cod_cargo = c.cod_cargo
+INNER JOIN nivel n ON c.cod_nivel = n.cod_nivel
+GROUP BY n.descricao_nivel;
+
+select * from ex03
+---------------------------------------------------------
+
+CREATE VIEW ex04  AS
+SELECT 
+    YEAR(f.data_contratacao) AS ano_contratacao,
+    COUNT(f.cod_cargo) AS quantidade_funcionarios
+FROM funcionario f
+GROUP BY YEAR(f.data_contratacao);
+
+---------------------------------------------------------
+
+CREATE VIEW ex04a AS
+SELECT 
+    ce.estado, COUNT(f.cod_rh) AS quantidade_funcionarios
+FROM funcionario f
+JOIN cep ce ON f.cep = ce.cep
+GROUP BY ce.estado;
+
+
+select * from ex04a
+
+---------------------------------------------------------
+CREATE VIEW ex04b AS
+SELECT 
+    f.data_contratacao, COUNT(f.cod_rh) AS quantidade_funcionarios
+FROM funcionario f
+GROUP BY f.data_contratacao;
+
+select * from ex04b
+
+---------------------------------------------------------
+CREATE VIEW ex05a AS
+SELECT 
+    ce.regiao, COUNT(cl.cod_cliente) AS quantidade_clientes
+FROM cliente cl
+JOIN cep ce ON cl.cep = ce.cep
+GROUP BY ce.regiao;
+
+
+select * from ex05a
+---------------------------------------------------------
+CREATE VIEW ex05b AS
+SELECT 
+    c.area, COUNT(cl.cod_cliente) AS quantidade_clientes
+FROM cliente cl
+JOIN cargo c ON cl.cod_cargo_responsavel = c.cod_cargo
+GROUP BY c.area;
+
+
+select * from ex05b
+----------------------------------------------------------
+CREATE VIEW ex05c AS
+SELECT 
+    n.descricao_nivel, COUNT(cl.cod_cliente) AS quantidade_clientes
+FROM cliente cl
+JOIN cargo c ON cl.cod_cargo_responsavel = c.cod_cargo
+JOIN nivel n ON c.cod_nivel = n.cod_nivel
+GROUP BY n.descricao_nivel;
+
+select * from ex05c
+----------------------------------------------------------
+CREATE VIEW ex06 AS
+SELECT 
+    n.descricao_nivel, SUM(cl.valor_contrato_anual) AS total_contrato_anual
+FROM cliente cl
+JOIN cargo c ON cl.cod_cargo_responsavel = c.cod_cargo
+JOIN nivel n ON c.cod_nivel = n.cod_nivel
+GROUP BY n.descricao_nivel;
+
+
+select * from ex06
+----------------------------------------------------------
+CREATE VIEW ex07 AS
+SELECT 
+    n.*, c.*, f.*,
+    (f.salario_base + f.impostos + f.beneficios + f.vt + f.vr) AS salario_total
+FROM funcionario f
+JOIN cargo c ON f.cod_cargo = c.cod_cargo
+JOIN nivel n ON c.cod_nivel = n.cod_nivel;
+
+
+select * from ex07
+----------------------------------------------------------
+CREATE VIEW ex08a AS
+SELECT 
+    c.cod_cargo,
+    SUM(f.salario_base) AS soma_salario_base,
+    SUM(f.salario_base + f.impostos + f.beneficios + f.vt + f.vr) AS soma_salario_total,
+    SUM(f.dias_uteis_trabalhados_ano_orcamentario) AS total_dias_trabalhados
+FROM funcionario f
+JOIN cargo c ON f.cod_cargo = c.cod_cargo
+GROUP BY c.cod_cargo;
+
+
+select * from ex08a
+-------------------------------------------------------------
+
+CREATE VIEW ex08b AS
+SELECT 
+    ce.regiao,
+    SUM(f.salario_base) AS soma_salario_base,
+    SUM(f.salario_base + f.impostos + f.beneficios + f.vt + f.vr) AS soma_salario_total,
+    SUM(f.dias_uteis_trabalhados_ano_orcamentario) AS total_dias_trabalhados
+FROM funcionario f
+JOIN cep ce ON f.cep = ce.cep
+GROUP BY ce.regiao;
+
+select * from ex08b
+--------------------------------------------------------------
+
+CREATE VIEW ex08c AS
+SELECT 
+    n.descricao_nivel,
+    SUM(f.salario_base) AS soma_salario_base,
+    SUM(f.salario_base + f.impostos + f.beneficios + f.vt + f.vr) AS soma_salario_total,
+    SUM(f.dias_uteis_trabalhados_ano_orcamentario) AS total_dias_trabalhados
+FROM funcionario f
+JOIN cargo c ON f.cod_cargo = c.cod_cargo
+JOIN nivel n ON c.cod_nivel = n.cod_nivel
+GROUP BY n.descricao_nivel;
+
+
+select * from ex08c
+
+
+
+
+
+
+
+
+
