@@ -1,0 +1,36 @@
+create view ex70 as
+select p.codigo_produto,
+       p.descricao_produto,
+       sum(ip.quantidade) as quantidade_vendida
+from item_do_pedido ip
+join produto p on ip.codigo_produto = p.codigo_produto
+group by p.codigo_produto, p.descricao_produto
+order by 3 desc
+limit 5;
+
+
+select * from ex70
+--------------------------------------------------------
+CREATE VIEW EX1
+AS 
+SELECT N.*,C.AREA,C.COD_AREA,C.QUADRO,C.BONUS,C.CONTRATACAO,
+			CL.*,CEP.ESTADO, CEP.REGIAO
+FROM NIVEL N INNER JOIN CARGO C
+	ON N.COD_NIVEL = C.COD_NIVEL
+	INNER JOIN CLIENTE CL
+	ON C.COD_CARGO=CL.COD_CARGO_RESPONSAVEL
+    INNER JOIN CEP
+	ON CL.CEP=CEP.CEP
+
+	SELECT * FROM EX1
+--------------------------------------------------------
+create view ex2
+as
+select cep.regiao, count(*) as quantidade
+from cliente c inner join cep
+on c.cep=cep.cep
+group by cep.regiao
+
+select * from ex2
+
+
