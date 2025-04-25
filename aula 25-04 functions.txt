@@ -1,0 +1,31 @@
+/*estrutura de uma function*/
+create function NOME()
+returns TIPODEDADO
+language sql
+as $$
+COMANDOS NECESSARIOS
+$$;
+select * from NOME()
+
+/*Crie uma função para retornar o número de vendedores cadastrados */
+create function vendedores()
+returns integer
+language sql 
+as $$
+select count(*)
+from vendedor;
+$$;
+select * from vendedores();
+
+/*Desenvolva uma função que informe a quantidade de pedidos em que um vendedor específico participou.*/
+create function pedido_vendedor(nome VARCHAR)
+returns integer
+language sql
+as $$
+	select count(*)
+	from pedido p inner join vendedor v
+	on p.codigo_vendedor=v.codigo_vendedor
+	where v.nome_vendedor=nome;
+$$;
+select * from pedido_vendedor(nome);
+
