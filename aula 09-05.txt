@@ -1,0 +1,22 @@
+/*&elabore uma function em sql que liste os vendedores
+(codigo, nome, salario) que atenderam um cliente como parâmetro*/
+
+create function vendedores_por_cliente(nome varchar)
+returns table (
+    codigo_vendedor integer,
+    nome_vendedor varchar,
+    salario_fixo numeric
+)
+language sql
+as $$
+    select distinct 
+        v.codigo_vendedor,
+        v.nome_vendedor,
+        v.salario_fixo
+    from pedido p
+    join vendedor v on p.codigo_vendedor = v.codigo_vendedor
+    join cliente c on p.codigo_cliente = c.codigo_cliente
+    where c.nome_cliente = nome;
+$$;
+
+select * from vendedores_por_cliente('ana');
