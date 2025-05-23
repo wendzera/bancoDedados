@@ -1,0 +1,44 @@
+create function ex79(codvend int, estado char, prazo int)
+returns table(codigo int, nome varchar)
+language sql
+as $$
+	select c.codigo_cliente, c.nome_cliente
+	from cliente c inner join pedido p
+	on c.codigo_cliente=p.codigo_cliente
+	where p.codigo_vendedor=codvend and 
+	c.uf=estado and 
+	p.prazo_entrega=prazo;
+$$;
+
+select * from ex79(101, 'RJ',20);
+
+
+
+create role adm;
+
+select * from pg_user;
+select * from pg_group;
+
+alter role adm login;
+alter role adm with encrypted password '123';
+
+
+create role user1;
+alter role user1 login;
+alter role adm with encrypted password '123';
+
+create role user2;
+alter role user2 login;
+alter role adm with encrypted password '123';
+
+create role user3;
+alter role user3 login;
+alter role adm with encrypted password '123';
+
+
+create role funcionário;
+grant funcionário to user1, user2, usera3;
+revoke funcionário from user3;
+
+drop role funcionário;
+drop role user1, user2, user3;
