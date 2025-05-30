@@ -1,0 +1,22 @@
+/*Criando usuários*/
+create role lucas with encrypted password '123' login;
+
+create role bruno with encrypted password '123' login;
+
+create role helena with encrypted password '123' login;
+
+/*exibir resultado*/
+select * from pg_user;
+
+/*alterando permissões de usuário*/
+alter role bruno createdb superuser;
+
+alter role bruno nosuperuser;
+
+/*retirar permissões do usuário*/
+revoke all on cliente, pedido, item_do_pedido, produto, vendedor from public;
+
+/*dar permissão para o usuário (grant -> nome da permissão, nome da tabela e nome do usuário)*/
+grant select, insert on cliente to bruno;
+
+select * from produto;
