@@ -1,0 +1,41 @@
+/*criar trigger função*/
+create or replace function exemplo2()
+returns trigger as $$
+begin 
+	 if (old.endereco is distinct from new.endereco)
+	 or (old.cep is distinct from new.cep) then
+	  insert into histendercliente (codigo_cliente, end_cliente, cep)
+	  values (old.codigo_cliente, old.endereco, old.cep);
+	 end if;
+	 return new;
+end;
+$$ language plpgsql;
+
+/*criar o trigger*/
+create trigger exemplo2
+after insert or update
+on cliente 
+for each row
+execute function exemplo2();
+
+select * from cliente where codigo_cliente=110
+
+
+ create or replace function exercicio80()
+returns trigger as
+$$
+begin
+    raise notice 'Os dados do produto % foram excluídos com sucesso.', old.codigo_produto;
+    return old;
+end;
+$$
+language plpgsql;
+
+create trigger exercicio80
+after delete on produto
+for each row
+execute function exercicio80();
+
+ 
+ 
+ 
