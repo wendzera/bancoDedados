@@ -1,0 +1,49 @@
+/*81. Crie um Trigger que ao inserir ou alterar um registro da tabela item 
+do pedido apareça uma mensagem informando que os dados foram alterados com sucesso.*/
+
+create or replace function ex2()
+returns trigger as
+$$
+begin
+	raise notice 'Dados Item Pedido inserido/alterado com sucesso';
+	return new;
+end;
+$$ language plpgsql;
+
+create trigger ex2
+after insert or update 
+on item_do_pedido
+for each row
+execute function ex2();
+
+select *
+from item_do_pedido;
+
+update item_do_pedido
+	set quantidade=30
+	where num_pedido=119 and
+		codigo_produto=77;
+
+
+/*82. Desenvolver um trigger que ao ser alterado o salário
+do Vendedor insira o salário antigo na tabela histórico do salário*/
+
+create or replace function ex3()
+returns trigger as
+$$
+begin
+if old.salario_fixo is distinct from new.salario_fixo
+then insert into histsalario (codigo_vendedor, salario_fixo)
+values (old.codigo_vendedor, old.salario_fixo);
+end if;
+return new;
+end
+$$ language plpgsql;
+
+
+create trigger ex3
+after update 
+on vendedor 
+for each row 
+execute function ex3();
+ 
